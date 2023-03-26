@@ -1,23 +1,38 @@
-import logo from './logo.svg';
 import './App.css';
+import React from "react";
+import Header from './components/Header'
+import Footer from './components/Footer'
+import { data } from './components/MovieData'
+import MovieList from './components/MovieList';
+import background from './images/background.jpg'
+
+
+const useState = React.useState
 
 function App() {
+  const [movies, setMovies] = useState(data);
+
+  const addReview = (id, rating, comment) => {
+    const movie = movies.find(movie => movie.id === id);
+      movie.reviews.push(
+        {
+          user: `user$(Math.floor(Math.random() * 1000) + 100)`,
+          stars: rating,
+          comment: comment
+        }
+      );
+    setMovies([...movies, movie]);
+  }
+
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div style={{backgroundImage: `url(${background})`}}>
+        <Header />
+        <h2 className='mt-4 fs-1'>Rate and Review Movies!</h2>
+        <MovieList movies={movies} addReview={addReview} />
+        <Footer />
+      </div>
     </div>
   );
 }
